@@ -5,6 +5,7 @@ from app.fetch_datasets import fetch_blob_data
 from app.process_household_data import process_data
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
+import os
 
 app = Flask(__name__)
 
@@ -12,16 +13,8 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-# Load configuration from config.json
-try:
-    with open('config.json') as config_file:
-        config = json.load(config_file)
-except FileNotFoundError as e:
-    logger.error(f"Error loading configuration file: {e}")
-    raise
-
-connection_string = config.get('connection_string')
-container_name = config.get('container_name')
+connection_string = os.environ.get('AZURE_CONNECTION_STRING')
+container_name = os.environ.get('CONTAINER_NAME')
 
 if not connection_string or not container_name:
     logger.error("Connection string or container name is missing in the config file.")
