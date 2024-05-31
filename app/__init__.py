@@ -9,6 +9,10 @@ import os
 
 app = Flask(__name__)
 
+# Set up logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
 connection_string = os.environ.get('AZURE_CONNECTION_STRING')
 container_name = os.environ.get('CONTAINER_NAME')
 
@@ -56,7 +60,9 @@ except ImportError as e:
     logger.error(f"Error importing dashboard module: {e}")
     raise
 
-
+# Run the Flask application
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 
